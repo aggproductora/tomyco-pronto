@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Tomyco Studio — Próximamente</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -236,9 +236,22 @@
     /* ════════════════════════════
        MOBILE OVERRIDES  (≤ 600px)
     ════════════════════════════ */
+
+    /* Botón mobile: oculto por defecto, visible sólo en mobile */
+    #reel-btn-mobile { display: none; }
+
     @media (max-width: 600px) {
+      /* Safe area: logo no queda bajo el notch */
+      #logo-wrap {
+        top: calc(clamp(20px, 3vw, 36px) + env(safe-area-inset-top, 0px));
+        left: calc(clamp(20px, 3vw, 44px) + env(safe-area-inset-left, 0px));
+      }
+
       #center-content {
-        padding: 90px 20px 200px;
+        padding-top: calc(90px + env(safe-area-inset-top, 0px));
+        padding-bottom: 180px;
+        padding-left: calc(20px + env(safe-area-inset-left, 0px));
+        padding-right: calc(20px + env(safe-area-inset-right, 0px));
         justify-content: center;
       }
 
@@ -250,18 +263,32 @@
         max-width: 90%;
       }
 
-      #reel-btn { gap: 14px; }
+      /* Ocultar botón del área central en mobile */
+      #reel-btn { display: none; }
 
-      .play-circle { width: 52px; height: 52px; }
-
-      .btn-label { font-size: 1.35rem; }
+      /* Mostrar botón mobile debajo del tagline */
+      #reel-btn-mobile {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-top: 14px;
+      }
+      #reel-btn-mobile .play-circle { width: 48px; height: 48px; }
+      #reel-btn-mobile .btn-label   { font-size: 1.25rem; }
 
       #bottom-bar {
         flex-direction: column;
         align-items: center;
         text-align: center;
-        padding: 16px 20px 24px;
-        gap: 10px;
+        padding-top: 16px;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        padding-left: calc(20px + env(safe-area-inset-left, 0px));
+        padding-right: calc(20px + env(safe-area-inset-right, 0px));
+        gap: 8px;
       }
 
       #bottom-left { align-items: center; gap: 4px; }
@@ -372,6 +399,14 @@
   <div id="bottom-bar">
     <div id="bottom-left">
       <div id="tagline" class="fade-up" data-delay="4">Hacé despegar tu marca</div>
+      <button id="reel-btn-mobile" class="fade-up" data-delay="4" onclick="openReel()">
+        <span class="play-circle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#EFF4FF">
+            <polygon points="6 3 20 12 6 21 6 3"/>
+          </svg>
+        </span>
+        <span class="btn-label">Conocé a Cosmo, Luna &amp; Orbit</span>
+      </button>
       <a class="contact-line fade-up" data-delay="5" href="mailto:produccion@tomycostudio.com">produccion@tomycostudio.com</a>
       <a class="contact-line fade-up" data-delay="6" href="tel:+5491124092081">(+54) 9 11 2409-2081</a>
     </div>
