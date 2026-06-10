@@ -237,9 +237,6 @@
        MOBILE OVERRIDES  (≤ 600px)
     ════════════════════════════ */
 
-    /* Botón mobile: oculto por defecto, visible sólo en mobile */
-    #reel-btn-mobile { display: none; }
-
     @media (max-width: 600px) {
       /* Safe area: logo no queda bajo el notch */
       #logo-wrap {
@@ -263,29 +260,21 @@
         max-width: 90%;
       }
 
-      /* Ocultar botón del área central en mobile */
-      #reel-btn { display: none; }
-
-      /* Mostrar botón mobile debajo del tagline */
-      #reel-btn-mobile {
-        display: inline-flex;
+      /* Botón: texto arriba, círculo abajo, centrado */
+      #reel-btn {
+        flex-direction: column-reverse;
         align-items: center;
-        gap: 14px;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-        margin-top: 14px;
+        gap: 10px;
       }
-      #reel-btn-mobile .play-circle { width: 48px; height: 48px; }
-      #reel-btn-mobile .btn-label   { font-size: 1.25rem; }
+      .play-circle { width: 52px; height: 52px; }
+      .btn-label { font-size: 1.35rem; text-align: center; }
 
       #bottom-bar {
         flex-direction: column;
         align-items: center;
         text-align: center;
         padding-top: 16px;
-        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
         padding-left: calc(20px + env(safe-area-inset-left, 0px));
         padding-right: calc(20px + env(safe-area-inset-right, 0px));
         gap: 8px;
@@ -293,9 +282,16 @@
 
       #bottom-left { align-items: center; gap: 4px; }
 
-      #tagline { font-size: 1.7rem; }
+      #tagline {
+        font-size: 1.7rem;
+        color: #ffffff;
+      }
 
-      .contact-line { font-size: 0.62rem; letter-spacing: 0.1em; }
+      .contact-line {
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        color: rgba(255,255,255,0.75);
+      }
 
       #social-ig { align-self: center; margin-bottom: 0; }
     }
@@ -399,14 +395,6 @@
   <div id="bottom-bar">
     <div id="bottom-left">
       <div id="tagline" class="fade-up" data-delay="4">Hacé despegar tu marca</div>
-      <button id="reel-btn-mobile" class="fade-up" data-delay="4" onclick="openReel()">
-        <span class="play-circle">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#EFF4FF">
-            <polygon points="6 3 20 12 6 21 6 3"/>
-          </svg>
-        </span>
-        <span class="btn-label">Conocé a Cosmo, Luna &amp; Orbit</span>
-      </button>
       <a class="contact-line fade-up" data-delay="5" href="mailto:produccion@tomycostudio.com">produccion@tomycostudio.com</a>
       <a class="contact-line fade-up" data-delay="6" href="tel:+5491124092081">(+54) 9 11 2409-2081</a>
     </div>
