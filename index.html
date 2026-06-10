@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Condiment&display=swap" rel="stylesheet">
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --accent: #00F0FF;
@@ -18,16 +18,16 @@
       --cream: #EFF4FF;
     }
 
-    body {
+    html, body {
+      width: 100%; height: 100%;
       background: var(--space);
       color: var(--cream);
-      font-family: 'Anton', sans-serif;
       overflow: hidden;
-      height: 100vh;
-      width: 100vw;
     }
 
-    /* ── INTRO SCREEN ── */
+    /* ════════════════════════════
+       INTRO SCREEN
+    ════════════════════════════ */
     #intro-screen {
       position: fixed;
       inset: 0;
@@ -39,9 +39,11 @@
       transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
     }
     #intro-screen.fade-out { opacity: 0; pointer-events: none; }
-    #intro-logo { width: min(300px, 65vw); display: block; }
+    #intro-logo { width: min(280px, 60vw); display: block; }
 
-    /* ── MAIN CONTENT ── */
+    /* ════════════════════════════
+       BACKGROUND
+    ════════════════════════════ */
     #landing {
       position: relative;
       width: 100vw;
@@ -52,10 +54,9 @@
     #bg-image {
       position: absolute;
       inset: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
-      object-position: center bottom;
+      object-position: center 70%;
       z-index: 0;
       opacity: 0.78;
     }
@@ -65,23 +66,27 @@
       inset: 0;
       z-index: 1;
       background:
-        radial-gradient(ellipse at center bottom, transparent 25%, rgba(1,8,40,0.5) 100%),
-        linear-gradient(to top, rgba(1,8,40,0.9) 0%, rgba(1,8,40,0.05) 50%, rgba(1,8,40,0.55) 100%);
+        linear-gradient(to top,  rgba(1,8,40,0.97) 0%,  rgba(1,8,40,0.45) 40%, rgba(1,8,40,0.2) 65%, rgba(1,8,40,0.6) 100%),
+        radial-gradient(ellipse 120% 80% at 50% 100%, rgba(1,8,40,0.6) 0%, transparent 70%);
     }
 
-    /* ── LOGO — top left ── */
+    /* ════════════════════════════
+       LOGO — top left
+    ════════════════════════════ */
     #logo-wrap {
       position: absolute;
-      top: 32px;
-      left: 40px;
+      top: clamp(20px, 3vw, 36px);
+      left: clamp(20px, 3vw, 44px);
       z-index: 20;
     }
     #logo-canvas {
-      width: 160px;
+      width: clamp(110px, 13vw, 170px);
       display: block;
     }
 
-    /* ── CENTER CONTENT ── */
+    /* ════════════════════════════
+       CENTER CONTENT
+    ════════════════════════════ */
     #center-content {
       position: absolute;
       inset: 0;
@@ -91,166 +96,220 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 0 32px;
+      padding: 100px 24px 160px;
     }
 
     #headline {
       font-family: 'Anton', sans-serif;
-      font-size: clamp(2.2rem, 6vw, 5rem);
+      font-size: clamp(1.9rem, 5.5vw, 4.8rem);
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      line-height: 1.05;
+      line-height: 1.06;
       color: var(--cream);
-      margin-bottom: 18px;
-      text-shadow: 0 2px 40px rgba(0,240,255,0.15);
+      margin-bottom: 16px;
     }
 
     #subtitle {
       font-family: 'Anton', sans-serif;
-      font-size: clamp(0.7rem, 1.3vw, 0.95rem);
+      font-size: clamp(0.62rem, 1.1vw, 0.88rem);
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(239,244,255,0.5);
-      line-height: 1.7;
-      max-width: 480px;
-      margin-bottom: 44px;
+      color: rgba(239,244,255,0.45);
+      line-height: 1.75;
+      max-width: 420px;
+      margin-bottom: clamp(28px, 5vw, 52px);
     }
 
-    /* ── REEL BUTTON — estilo "Ver Reel" ── */
+    /* ── Reel button ── */
     #reel-btn {
       display: inline-flex;
       align-items: center;
-      gap: 20px;
+      gap: clamp(12px, 2vw, 22px);
       background: none;
       border: none;
       cursor: pointer;
       padding: 0;
     }
-    #reel-btn .play-circle {
-      width: 72px;
-      height: 72px;
+
+    .play-circle {
+      flex-shrink: 0;
+      width: clamp(56px, 7vw, 76px);
+      height: clamp(56px, 7vw, 76px);
       border-radius: 50%;
-      border: 1.5px solid rgba(255,255,255,0.35);
       background: rgba(255,255,255,0.04);
       backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      transition: border-color 0.25s, background 0.25s, transform 0.25s;
       position: relative;
+      transition: background 0.25s, transform 0.25s;
     }
-    #reel-btn .play-circle::before {
+    .play-circle::before {
       content: '';
       position: absolute;
       inset: 0;
       border-radius: 50%;
       padding: 1.4px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.45) 100%);
+      background: linear-gradient(160deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.5) 100%);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
-      pointer-events: none;
     }
-    #reel-btn:hover .play-circle {
-      border-color: var(--accent);
-      background: rgba(0,240,255,0.08);
-      transform: scale(1.06);
-    }
-    #reel-btn .play-circle svg { margin-left: 4px; }
+    .play-circle svg { margin-left: 3px; }
 
-    #reel-btn .btn-label {
+    #reel-btn:hover .play-circle {
+      background: rgba(0,240,255,0.1);
+      transform: scale(1.07);
+    }
+
+    .btn-label {
       font-family: 'Condiment', cursive;
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
       color: var(--cream);
       letter-spacing: 0.02em;
       transition: color 0.25s;
-      white-space: nowrap;
+      text-align: left;
+      line-height: 1.1;
     }
     #reel-btn:hover .btn-label { color: var(--accent); }
 
-    /* ── BOTTOM LEFT — contacto ── */
-    #bottom-left {
+    /* ════════════════════════════
+       BOTTOM BAR
+       Desktop: tagline left + instagram right
+       Mobile:  stacked, centered
+    ════════════════════════════ */
+    #bottom-bar {
       position: absolute;
-      bottom: 40px;
-      left: 44px;
+      bottom: 0; left: 0; right: 0;
       z-index: 20;
       display: flex;
-      flex-direction: column;
-      gap: 6px;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: clamp(16px, 3vw, 32px) clamp(20px, 4vw, 48px);
+      gap: 16px;
     }
+
+    #bottom-left { display: flex; flex-direction: column; gap: 5px; }
 
     #tagline {
       font-family: 'Condiment', cursive;
-      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-size: clamp(1.6rem, 3.2vw, 2.8rem);
       color: var(--accent);
       line-height: 1;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .contact-line {
       font-family: 'Anton', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.13em;
+      font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(239,244,255,0.5);
+      color: rgba(239,244,255,0.45);
       text-decoration: none;
       transition: color 0.2s;
+      display: block;
     }
     .contact-line:hover { color: var(--accent); }
 
-    /* ── INSTAGRAM — bottom right ── */
+    /* Instagram */
     #social-ig {
-      position: absolute;
-      bottom: 40px;
-      right: 44px;
-      z-index: 20;
+      flex-shrink: 0;
       width: 40px; height: 40px;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       background: rgba(255,255,255,0.04);
-      border: 1.4px solid rgba(255,255,255,0.12);
-      transition: border-color 0.2s, background 0.2s;
-      text-decoration: none;
+      border: 1.4px solid rgba(255,255,255,0.15);
       backdrop-filter: blur(4px);
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+      align-self: flex-end;
+      margin-bottom: 4px;
     }
     #social-ig:hover {
       border-color: var(--accent);
       background: rgba(0,240,255,0.08);
     }
 
-    /* ── ENTRY ANIMATIONS ── */
+    /* ════════════════════════════
+       MOBILE OVERRIDES  (≤ 600px)
+    ════════════════════════════ */
+    @media (max-width: 600px) {
+      #center-content {
+        padding: 90px 20px 200px;
+        justify-content: center;
+      }
+
+      #headline { font-size: clamp(1.7rem, 8vw, 2.4rem); }
+
+      #subtitle {
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+        max-width: 90%;
+      }
+
+      #reel-btn { gap: 14px; }
+
+      .play-circle { width: 52px; height: 52px; }
+
+      .btn-label { font-size: 1.35rem; }
+
+      #bottom-bar {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 16px 20px 24px;
+        gap: 10px;
+      }
+
+      #bottom-left { align-items: center; gap: 4px; }
+
+      #tagline { font-size: 1.7rem; }
+
+      .contact-line { font-size: 0.62rem; letter-spacing: 0.1em; }
+
+      #social-ig { align-self: center; margin-bottom: 0; }
+    }
+
+    /* ════════════════════════════
+       ENTRY ANIMATIONS
+       Each element: separate delay assigned via JS
+    ════════════════════════════ */
     .fade-up {
       opacity: 0;
-      transform: translateY(22px);
+      transform: translateY(26px);
       transition: opacity 0.75s ease, transform 0.75s ease;
     }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-    /* ── REEL MODAL ── */
+    /* ════════════════════════════
+       REEL MODAL
+    ════════════════════════════ */
     #reel-modal {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 100000;
-      background: rgba(0,0,0,0.88);
+      background: rgba(0,0,0,0.9);
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
     }
     #reel-modal.open { display: flex; }
     #reel-inner {
       position: relative;
-      width: min(900px, 92vw);
+      width: min(900px, 94vw);
       aspect-ratio: 16/9;
     }
-    #reel-iframe { width: 100%; height: 100%; border: none; border-radius: 16px; }
+    #reel-iframe { width: 100%; height: 100%; border: none; border-radius: 14px; }
     #reel-close {
       position: absolute;
-      top: -44px; right: 0;
+      top: -42px; right: 0;
       background: none; border: none;
       color: var(--cream);
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       cursor: pointer;
       font-family: 'Anton', sans-serif;
       letter-spacing: 0.05em;
@@ -280,42 +339,47 @@
   <div id="bg-overlay"></div>
 
   <!-- Logo top-left -->
-  <div id="logo-wrap" class="fade-up">
-    <canvas id="logo-canvas" width="160"></canvas>
+  <div id="logo-wrap" class="fade-up" data-delay="0">
+    <canvas id="logo-canvas"></canvas>
   </div>
 
   <!-- Center -->
   <div id="center-content">
-    <h1 id="headline" class="fade-up">
+    <h1 id="headline" class="fade-up" data-delay="1">
       Nos estamos preparando<br>para despegar
     </h1>
-    <p id="subtitle" class="fade-up">
+    <p id="subtitle" class="fade-up" data-delay="2">
       Estudio argentino de contenidos digitales que levitan.<br>
       Desarrollos que se elevan hasta las estrellas.
     </p>
-    <button id="reel-btn" class="fade-up" onclick="openReel()">
+    <button id="reel-btn" class="fade-up" data-delay="3" onclick="openReel()">
       <span class="play-circle">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#EFF4FF"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#EFF4FF">
+          <polygon points="6 3 20 12 6 21 6 3"/>
+        </svg>
       </span>
       <span class="btn-label">Conocé a Cosmo, Luna &amp; Orbit</span>
     </button>
   </div>
 
-  <!-- Bottom left — tagline + contacto -->
-  <div id="bottom-left">
-    <div id="tagline" class="fade-up">Hacé despegar tu marca</div>
-    <a class="contact-line fade-up" href="mailto:produccion@tomycostudio.com">produccion@tomycostudio.com</a>
-    <a class="contact-line fade-up" href="tel:+5491124092081">(+54) 9 11 2409-2081</a>
+  <!-- Bottom bar -->
+  <div id="bottom-bar">
+    <div id="bottom-left">
+      <div id="tagline" class="fade-up" data-delay="4">Hacé despegar tu marca</div>
+      <a class="contact-line fade-up" data-delay="5" href="mailto:produccion@tomycostudio.com">produccion@tomycostudio.com</a>
+      <a class="contact-line fade-up" data-delay="6" href="tel:+5491124092081">(+54) 9 11 2409-2081</a>
+    </div>
+    <a id="social-ig" class="fade-up" data-delay="6"
+       href="https://www.instagram.com/tomyco_studio/"
+       target="_blank" rel="noopener" aria-label="Instagram">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+           stroke="#EFF4FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="0.8" fill="#EFF4FF" stroke="none"/>
+      </svg>
+    </a>
   </div>
-
-  <!-- Instagram bottom-right -->
-  <a id="social-ig" class="fade-up" href="https://www.instagram.com/tomyco_studio/" target="_blank" rel="noopener" aria-label="Instagram">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EFF4FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-      <circle cx="12" cy="12" r="4"/>
-      <circle cx="17.5" cy="6.5" r="0.8" fill="#EFF4FF" stroke="none"/>
-    </svg>
-  </a>
 </div>
 
 <script>
@@ -324,12 +388,10 @@
   function openReel() {
     document.getElementById('reel-iframe').src = REEL_URL;
     document.getElementById('reel-modal').classList.add('open');
-    document.body.style.overflow = 'hidden';
   }
   function closeReel() {
     document.getElementById('reel-modal').classList.remove('open');
     document.getElementById('reel-iframe').src = '';
-    document.body.style.overflow = '';
   }
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeReel(); });
   document.getElementById('reel-modal').addEventListener('click', function(e) {
@@ -339,33 +401,36 @@
   /* ── LOGO ANIMATION ── */
   (function() {
     var TOTAL = 52, FPS = 24, frames = [], loaded = 0;
+
     for (var i = 0; i < TOTAL; i++) {
       var img = new Image();
       img.src = 'Logo/Logo tomyco_' + String(i).padStart(5, '0') + '.png';
-      img.onload = (function() { loaded++; if (loaded === TOTAL) startIntro(); });
-      img.onerror = (function() { loaded++; if (loaded === TOTAL) startIntro(); });
+      img.onload  = function() { loaded++; if (loaded === TOTAL) startIntro(); };
+      img.onerror = function() { loaded++; if (loaded === TOTAL) startIntro(); };
       frames.push(img);
     }
 
     function startIntro() {
       var screen = document.getElementById('intro-screen');
       var canvas = document.getElementById('intro-logo');
-      var ctx = canvas.getContext('2d');
-      var ref = frames.find(function(f) { return f.naturalWidth > 0; });
-      if (!ref) { fadeOut(screen); return; }
-      var ratio = ref.naturalHeight / ref.naturalWidth;
-      canvas.width = Math.min(300, window.innerWidth * 0.65);
+      var ctx    = canvas.getContext('2d');
+      var ref    = frames.find(function(f) { return f.naturalWidth > 0; });
+      if (!ref) { doFadeOut(screen); return; }
+
+      var ratio  = ref.naturalHeight / ref.naturalWidth;
+      canvas.width  = Math.min(280, window.innerWidth * 0.6);
       canvas.height = Math.round(canvas.width * ratio);
+
       var frame = 0;
       var id = setInterval(function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(frames[frame], 0, 0, canvas.width, canvas.height);
         if (frame < TOTAL - 1) { frame++; }
-        else { clearInterval(id); setTimeout(function() { fadeOut(screen); }, 600); }
+        else { clearInterval(id); setTimeout(function() { doFadeOut(screen); }, 600); }
       }, 1000 / FPS);
     }
 
-    function fadeOut(screen) {
+    function doFadeOut(screen) {
       screen.classList.add('fade-out');
       setTimeout(function() {
         screen.style.display = 'none';
@@ -375,9 +440,16 @@
 
     function revealLanding() {
       startHeaderLogo();
-      var els = document.querySelectorAll('.fade-up');
-      els.forEach(function(el, i) {
-        setTimeout(function() { el.classList.add('visible'); }, i * 130);
+
+      /* Staggered entry — 150ms between each element, in data-delay order */
+      var STEP = 150;
+      var els = Array.from(document.querySelectorAll('.fade-up'));
+      els.sort(function(a, b) {
+        return parseInt(a.dataset.delay || 0) - parseInt(b.dataset.delay || 0);
+      });
+      els.forEach(function(el) {
+        var delay = parseInt(el.dataset.delay || 0) * STEP;
+        setTimeout(function() { el.classList.add('visible'); }, delay);
       });
     }
 
@@ -387,8 +459,12 @@
       var ctx = canvas.getContext('2d');
       var ref = frames.find(function(f) { return f.naturalWidth > 0; });
       if (!ref) return;
+
       var ratio = ref.naturalHeight / ref.naturalWidth;
-      canvas.height = Math.round(canvas.width * ratio);
+      var w = canvas.offsetWidth || 140;
+      canvas.width  = w;
+      canvas.height = Math.round(w * ratio);
+
       var frame = 0;
       var id = setInterval(function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
