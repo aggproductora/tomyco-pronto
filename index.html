@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomyco Studio — Próximamente</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Condiment&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --accent: #00F0FF;
+      --space: #010828;
+      --cream: #EFF4FF;
+    }
+
+    body {
+      background: var(--space);
+      color: var(--cream);
+      font-family: 'Anton', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ── INTRO SCREEN ── */
+    #intro-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #intro-screen.fade-out { opacity: 0; pointer-events: none; }
+    #intro-logo { width: min(300px, 65vw); display: block; }
+
+    /* ── GRAIN ── */
+    #grain-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 9999;
+      pointer-events: none;
+      mix-blend-mode: lighten;
+      opacity: 0.12;
+    }
+
+    /* ── MAIN CONTENT ── */
+    #landing {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* hero image */
+    #bg-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center bottom;
+      z-index: 0;
+      opacity: 0.75;
+    }
+
+    /* dark vignette overlay */
+    #bg-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(ellipse at center bottom, transparent 30%, rgba(1,8,40,0.55) 100%),
+        linear-gradient(to top, rgba(1,8,40,0.85) 0%, rgba(1,8,40,0.1) 45%, rgba(1,8,40,0.6) 100%);
+    }
+
+    /* content stack */
+    #content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+      padding: 0 24px;
+    }
+
+    /* logo at top */
+    #header-logo-wrap {
+      margin-bottom: 28px;
+    }
+    #logo-canvas {
+      width: 160px;
+      display: block;
+    }
+
+    /* headline */
+    #headline {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 36px;
+      text-shadow: 0 2px 32px rgba(0,240,255,0.18);
+    }
+
+    /* reel button */
+    #reel-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 32px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Anton', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--space);
+      background: var(--accent);
+      box-shadow: 0 0 28px rgba(0,240,255,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 48px;
+    }
+    #reel-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 44px rgba(0,240,255,0.55);
+    }
+    #reel-btn svg { flex-shrink: 0; }
+
+    /* contact */
+    #contact-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Anton', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(239,244,255,0.55);
+      margin-bottom: 24px;
+    }
+    #contact-block a {
+      color: rgba(239,244,255,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    #contact-block a:hover { color: var(--accent); }
+
+    /* social icons */
+    #socials {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .social-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.04);
+      border: 1.4px solid rgba(255,255,255,0.12);
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+      backdrop-filter: blur(4px);
+    }
+    .social-btn:hover {
+      border-color: var(--accent);
+      background: rgba(0,240,255,0.08);
+    }
+    .social-btn svg { display: block; }
+
+    /* entry animations */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up:nth-child(1) { transition-delay: 0s; }
+    .fade-up:nth-child(2) { transition-delay: 0.12s; }
+    .fade-up:nth-child(3) { transition-delay: 0.24s; }
+    .fade-up:nth-child(4) { transition-delay: 0.36s; }
+    .fade-up:nth-child(5) { transition-delay: 0.48s; }
+
+    /* ── REEL MODAL ── */
+    #reel-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      background: rgba(0,0,0,0.88);
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+    #reel-modal.open { display: flex; }
+    #reel-inner {
+      position: relative;
+      width: min(880px, 92vw);
+      aspect-ratio: 16/9;
+    }
+    #reel-iframe {
+      width: 100%; height: 100%;
+      border: none;
+      border-radius: 16px;
+    }
+    #reel-close {
+      position: absolute;
+      top: -44px; right: 0;
+      background: none;
+      border: none;
+      color: var(--cream);
+      font-size: 2rem;
+      cursor: pointer;
+      font-family: 'Anton', sans-serif;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    #reel-close:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- INTRO SCREEN -->
+<div id="intro-screen">
+  <canvas id="intro-logo"></canvas>
+</div>
+
+<!-- GRAIN -->
+<canvas id="grain-canvas"></canvas>
+
+<!-- REEL MODAL -->
+<div id="reel-modal" role="dialog" aria-modal="true">
+  <div id="reel-inner">
+    <button id="reel-close" onclick="closeReel()">✕ Cerrar</button>
+    <iframe id="reel-iframe" src="" allowfullscreen allow="autoplay; fullscreen"></iframe>
+  </div>
+</div>
+
+<!-- LANDING -->
+<div id="landing">
+  <img id="bg-image" src="portada/despegue.png" alt="">
+  <div id="bg-overlay"></div>
+
+  <div id="content">
+    <!-- Logo -->
+    <div id="header-logo-wrap" class="fade-up">
+      <canvas id="logo-canvas" width="160"></canvas>
+    </div>
+
+    <!-- Headline -->
+    <h1 id="headline" class="fade-up">
+      Nos estamos preparando<br>para despegar
+    </h1>
+
+    <!-- Reel Button -->
+    <button id="reel-btn" class="fade-up" onclick="openReel()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Conocé a Cosmo, Luna y Orbit
+    </button>
+
+    <!-- Contact -->
+    <div id="contact-block" class="fade-up">
+      <span>Contacto</span>
+      <a href="mailto:produccion@tomycostudio.com">produccion@tomycostudio.com</a>
+      <a href="tel:+5491124092081">(+54) 9 11 2409-2081</a>
+    </div>
+
+    <!-- Socials -->
+    <div id="socials" class="fade-up">
+      <!-- Instagram -->
+      <a class="social-btn" href="https://www.instagram.com/tomyco_studio/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EFF4FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.8" fill="#EFF4FF" stroke="none"/>
+        </svg>
+      </a>
+      <!-- Behance -->
+      <a class="social-btn" href="https://www.behance.net/gallery/242503683/Tomyco" target="_blank" rel="noopener" aria-label="Behance">
+        <svg width="20" height="14" viewBox="0 0 50 32" fill="#EFF4FF">
+          <path d="M0 0h21.2c5.8 0 10.4 1.5 10.4 8.1 0 3.2-1.5 5.5-4.3 6.9 4 1.1 6.3 4.1 6.3 8.3C33.6 30 28.2 32 22.2 32H0V0zm8.2 13h11.5c2.7 0 4.7-1.1 4.7-4 0-3.1-2.1-3.9-4.8-3.9H8.2v7.9zm0 13.2h12.5c3 0 5.4-1.1 5.4-4.5 0-3.5-2.5-4.5-5.5-4.5H8.2v9zm29.6-5.9c.5 3.2 2.6 5 5.9 5 2 0 4.1-1 4.9-2.9h6.8c-1.7 5.4-6.3 7.9-11.9 7.9-8 0-13-4.9-13-12.9C31.5 10.4 36.4 5 44.3 5c8.4 0 12.7 5.6 12.7 13.6v1.7H37.8zm11.3-4.4c-.2-2.8-2.3-4.8-5.1-4.8-2.9 0-5.1 1.9-5.6 4.8h10.7zM37.4 2.7h14.2V6H37.4V2.7z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── REEL ── */
+  var REEL_URL = 'https://www.youtube.com/embed/aQzOmdpfISo?autoplay=1&rel=0&modestbranding=1';
+  function openReel() {
+    document.getElementById('reel-iframe').src = REEL_URL;
+    document.getElementById('reel-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeReel() {
+    document.getElementById('reel-modal').classList.remove('open');
+    document.getElementById('reel-iframe').src = '';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeReel(); });
+  document.getElementById('reel-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeReel();
+  });
+
+  /* ── GRAIN ── */
+  (function() {
+    var canvas = document.getElementById('grain-canvas');
+    var ctx = canvas.getContext('2d');
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    function drawGrain() {
+      var w = canvas.width, h = canvas.height;
+      var imageData = ctx.createImageData(w, h);
+      var data = imageData.data;
+      for (var i = 0; i < data.length; i += 4) {
+        var v = Math.random() * 255 | 0;
+        data[i] = v; data[i+1] = v; data[i+2] = v; data[i+3] = 255;
+      }
+      ctx.putImageData(imageData, 0, 0);
+      requestAnimationFrame(drawGrain);
+    }
+    drawGrain();
+  })();
+
+  /* ── LOGO ANIMATION (intro + header, plays once each) ── */
+  (function() {
+    var TOTAL = 52, FPS = 24, frames = [], loaded = 0;
+    for (var i = 0; i < TOTAL; i++) {
+      var img = new Image();
+      img.src = 'Logo/Logo tomyco_' + String(i).padStart(5, '0') + '.png';
+      img.onload = (function() { loaded++; if (loaded === TOTAL) startIntro(); });
+      img.onerror = (function() { loaded++; if (loaded === TOTAL) startIntro(); });
+      frames.push(img);
+    }
+
+    function startIntro() {
+      var screen = document.getElementById('intro-screen');
+      var canvas = document.getElementById('intro-logo');
+      var ctx = canvas.getContext('2d');
+      var ref = frames.find(function(f) { return f.naturalWidth > 0; });
+      if (!ref) { fadeOut(screen); return; }
+      var ratio = ref.naturalHeight / ref.naturalWidth;
+      canvas.width = Math.min(300, window.innerWidth * 0.65);
+      canvas.height = Math.round(canvas.width * ratio);
+      var frame = 0;
+      var id = setInterval(function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(frames[frame], 0, 0, canvas.width, canvas.height);
+        if (frame < TOTAL - 1) { frame++; }
+        else { clearInterval(id); setTimeout(function() { fadeOut(screen); }, 600); }
+      }, 1000 / FPS);
+    }
+
+    function fadeOut(screen) {
+      screen.classList.add('fade-out');
+      setTimeout(function() {
+        screen.style.display = 'none';
+        revealLanding();
+      }, 900);
+    }
+
+    function revealLanding() {
+      startHeaderLogo();
+      var els = document.querySelectorAll('.fade-up');
+      els.forEach(function(el, i) {
+        setTimeout(function() { el.classList.add('visible'); }, i * 120);
+      });
+    }
+
+    function startHeaderLogo() {
+      var canvas = document.getElementById('logo-canvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var ref = frames.find(function(f) { return f.naturalWidth > 0; });
+      if (!ref) return;
+      var ratio = ref.naturalHeight / ref.naturalWidth;
+      canvas.height = Math.round(canvas.width * ratio);
+      var frame = 0;
+      var id = setInterval(function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(frames[frame], 0, 0, canvas.width, canvas.height);
+        if (frame < TOTAL - 1) { frame++; }
+        else { clearInterval(id); }
+      }, 1000 / FPS);
+    }
+  })();
+</script>
+</body>
+</html>
